@@ -1,0 +1,12 @@
+# Prometheus targets for production environment
+# Replace the placeholders below with the actual IP addresses of your Prometheus servers
+# These will be used by Grafana to configure the Prometheus datasource
+# Each target defines a unique datasource name and the target URL
+
+prometheus_targets:
+  - name: prometheus-1
+    url: http://IP_PROM1:9090
+  - name: prometheus-2
+    url: http://IP_PROM2:9090
+  - name: prometheus-3
+    url: http://IP_PROM3:9090

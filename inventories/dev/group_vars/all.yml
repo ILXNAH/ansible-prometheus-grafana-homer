@@ -1,0 +1,8 @@
+# Prometheus targets for dev environment
+# In development, everything runs on a single host (localhost)
+# The target is the Prometheus instance running on the same machine as Grafana
+# Format matches production environment: a list of named targets with their URLs
+
+prometheus_targets:
+  - name: prometheus-dev
+    url: http://localhost:9090
