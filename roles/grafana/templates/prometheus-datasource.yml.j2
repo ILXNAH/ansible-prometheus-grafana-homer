@@ -8,6 +8,6 @@ datasources:
   - name: {{ item.name }}     # Unique datasource name (e.g. prometheus-1)
     type: prometheus          # Type of datasource (Prometheus in this case)
     access: proxy             # Grafana server will proxy all requests to the datasource
-    url: {{ item.url }}       # Target address of the Prometheus server (e.g. http://IP:9090)
+    url: {{ item.url }}       # Target address of the Prometheus server (e.g. http://IP_PROM1:9090)
     isDefault: false          # None of the datasources is set as default
     editable: true            # Allows editing the datasource via the Grafana UI
