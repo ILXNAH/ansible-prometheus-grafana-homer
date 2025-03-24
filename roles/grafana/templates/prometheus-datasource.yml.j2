@@ -1,0 +1,13 @@
+# Jinja2 template for a single Prometheus datasource configuration
+# This template is used in a loop to generate multiple datasource files
+# Each Prometheus instance will have its own named datasource in Grafana
+
+apiVersion: 1  # Required API version for Grafana provisioning format
+
+datasources:
+  - name: {{ item.name }}     # Unique datasource name (e.g. prometheus-1)
+    type: prometheus          # Type of datasource (Prometheus in this case)
+    access: proxy             # Grafana server will proxy all requests to the datasource
+    url: {{ item.url }}       # Target address of the Prometheus server (e.g. http://IP:9090)
+    isDefault: false          # None of the datasources is set as default
+    editable: true            # Allows editing the datasource via the Grafana UI
