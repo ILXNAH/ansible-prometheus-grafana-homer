@@ -1,0 +1,20 @@
+# Prometheus configuration file
+# Defines scraping rules and targets for Prometheus monitoring.
+# Currently contains static configuration (no Jinja2 variables used yet).
+
+# Global configuration applied to all scrape jobs
+global:
+  scrape_interval: 15s  # How frequently Prometheus scrapes metrics
+
+# Scrape job definitions
+scrape_configs:
+
+  # Scrape Prometheus' own metrics
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']  # Self-scrape from Prometheus itself (default port)
+
+  # Scrape node-exporter metrics (system metrics)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['localhost:9100']  # Metrics exposed by node-exporter
