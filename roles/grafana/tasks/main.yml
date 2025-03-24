@@ -39,3 +39,13 @@
     enabled: true     # Start at boot
     state: started    # Start now
     daemon_reload: true  # Reload systemd to recognize the new service
+
+# Create a separate datasource file for each Prometheus instance
+- name: Provision multiple Prometheus datasources
+  template:
+    src: prometheus-datasource.yml.j2
+    dest: "/etc/grafana/provisioning/datasources/{{ item.name }}.yml"
+    owner: root
+    group: grafana
+    mode: '0644'
+  loop: "{{ prometheus_targets }}"
