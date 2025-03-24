@@ -6,13 +6,15 @@
 .DS_Store
 Thumbs.db
 
-# Ignore log files and temporary files
-# *.log
-# *.tmp
-# *.bak
+# Ignore temporary and draft files
 drafts/
+*.log
+*.tmp
+*.bak
+*.swp
 
 # Ignore compiled files
+# (Uncomment if needed based on project)
 # *.exe
 # *.dll
 # *.out
@@ -29,8 +31,3 @@ drafts/
 
 # Ignore local Ansible metadata and SSH known_hosts (e.g. from dynamic inventory)
 .ansible/
-
-# Ignore local config: log files, backup files and swap files
-*.log
-*.bak
-*.swp
