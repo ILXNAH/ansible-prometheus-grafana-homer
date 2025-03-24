@@ -1,0 +1,35 @@
+# Main Ansible playbook for deploying the monitoring stack
+
+# This play runs on all hosts (in both dev and prod inventories)
+# It installs and configures node-exporter for basic system metrics
+- name: Install node exporter on all hosts
+  hosts: all
+  become: true   # Execute tasks with elevated privileges (sudo)
+  roles:
+    - node-exporter  # Defined in roles/node-exporter/tasks/main.yml
+
+# This play runs only on hosts in the [prometheus] group
+# It installs Prometheus and configures it to scrape its own metrics and node-exporter on localhost
+- name: Install and configure Prometheus
+  hosts: prometheus
+  become: true   # Execute tasks with elevated privileges (sudo)
+  roles:
+    - prometheus  # Defined in roles/prometheus/tasks/main.yml
+
+# This play installs Grafana on hosts in the [grafana] group
+# It configures datasources for all Prometheus instances and imports dashboards
+- name: Install and configure Grafana
+  hosts: grafana
+  become: true   # Execute tasks with elevated privileges (sudo)
+  roles:
+    - grafana  # Defined in roles/grafana/tasks/main.yml
+
+# This play installs Homer and nginx reverse proxy on hosts in the [homer] group
+# Homer will serve as a homepage with links to Prometheus instances and Grafana
+# nginx will proxy HTTP requests from port 80 to Homer's port 8080
+- name: Install Homer dashboard and nginx reverse proxy
+  hosts: homer
+  become: true   # Execute tasks with elevated privileges (sudo)
+  roles:
+    - homer      # Defined in roles/homer/tasks/main.yml
+    - nginx      # Defined in roles/nginx/tasks/main.yml
