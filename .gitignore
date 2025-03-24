@@ -23,3 +23,14 @@ drafts/
 
 # Ignore Python virtual environments
 # venv/
+
+# Ignore Ansible retry files (created when a playbook fails)
+*.retry
+
+# Ignore local Ansible metadata and SSH known_hosts (e.g. from dynamic inventory)
+.ansible/
+
+# Ignore local config: log files, backup files and swap files
+*.log
+*.bak
+*.swp
