@@ -1,0 +1,83 @@
+---
+# tasks file for prometheus role
+# This role installs and configures Prometheus server on target hosts.
+
+# Create prometheus user and group
+- name: Create prometheus user
+  user:
+    name: prometheus
+    system: yes
+    shell: /bin/false
+
+# Create necessary directories for Prometheus data and configuration
+- name: Create directories for Prometheus
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: '0755'
+  loop:
+    - /etc/prometheus
+    - /var/lib/prometheus
+
+# Download Prometheus binary from official GitHub release
+- name: Download Prometheus binary
+  get_url:
+    url: https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+    dest: /tmp/prometheus.tar.gz
+
+# Extract Prometheus binary files
+- name: Extract Prometheus binary
+  unarchive:
+    src: /tmp/prometheus.tar.gz
+    dest: /tmp
+    remote_src: yes
+
+# Copy binaries to /usr/local/bin
+- name: Copy Prometheus binaries to /usr/local/bin
+  copy:
+    src: "/tmp/prometheus-2.52.0.linux-amd64/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
+    owner: prometheus
+    group: prometheus
+    mode: '0755'
+    remote_src: yes
+  loop:
+    - prometheus
+    - promtool
+
+# Copy Prometheus configuration file from template
+- name: Configure Prometheus
+  template:
+    src: prometheus.yml.j2
+    dest: /etc/prometheus/prometheus.yml
+    owner: prometheus
+    group: prometheus
+    mode: '0644'
+
+# Create systemd service file for Prometheus
+- name: Create systemd service for Prometheus
+  copy:
+    dest: /etc/systemd/system/prometheus.service
+    content: |
+      [Unit]
+      Description=Prometheus Service
+      After=network.target
+
+      [Service]
+      User=prometheus
+      ExecStart=/usr/local/bin/prometheus \
+        --config.file=/etc/prometheus/prometheus.yml \
+        --storage.tsdb.path=/var/lib/prometheus
+
+      [Install]
+      WantedBy=multi-user.target
+
+# Enable and start Prometheus service
+- name: Enable and start Prometheus service
+  systemd:
+    name: prometheus
+    enabled: true
+    state: started
+    daemon_reload: true
