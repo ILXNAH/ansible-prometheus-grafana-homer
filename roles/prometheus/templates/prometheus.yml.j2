@@ -12,7 +12,7 @@ scrape_configs:
 
   # Scrape Prometheus' own metrics
   # In both dev and prod, this uses localhost because each Prometheus runs on its own machine
-  - job_name: 'prometheus'
+  - job_name: 'self-metrics'
     static_configs:
       - targets: ['localhost:9090']  # Self-scrape from Prometheus itself (default port)
 
