@@ -30,7 +30,7 @@
   ansible.builtin.apt:
     name: grafana
     state: present
-    update_cache: yes
+    update_cache: true
 
 # Enable and start the Grafana systemd service
 - name: Enable and start Grafana service
@@ -53,7 +53,8 @@
 # Import Prometheus dashboard (ID 19105) from local JSON file
 - name: Import Prometheus dashboard
   ansible.builtin.uri:
-    url: http://localhost:3000/api/dashboards/db  # Grafana API endpoint for dashboard import
+    # Grafana API endpoint for dashboard import
+    url: http://localhost:3000/api/dashboards/db
     method: POST
     user: admin                                   # Default Grafana username
     password: admin                               # Default Grafana password
@@ -62,15 +63,15 @@
       Content-Type: "application/json"            # Required content type
     body: >-
       {{
-        lookup('file', 'dashboard-prometheus.json')    # Load local JSON file
-        | from_json                                    # Convert to data structure
-        | combine({                                    # Wrap in Grafana API structure
+        lookup('file', 'dashboard-prometheus.json')
+        | from_json
+        | combine({
             'dashboard': {'id': null, 'uid': 'prometheus-dashboard'},
             'overwrite': true,
             'folderId': 0,
             'message': 'Deployed via Ansible'
         })
-        | to_json                                      # Convert back to JSON for POST
+        | to_json
       }}
     body_format: json
   register: prometheus_dashboard_result               # Optional: store result for debugging
