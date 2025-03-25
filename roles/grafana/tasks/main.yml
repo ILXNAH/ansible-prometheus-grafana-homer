@@ -49,3 +49,53 @@
     group: grafana
     mode: '0644'
   loop: "{{ prometheus_targets }}"
+
+# Import Prometheus dashboard (ID 19105) from local JSON file
+- name: Import Prometheus dashboard
+  uri:
+    url: http://localhost:3000/api/dashboards/db  # Grafana API endpoint for dashboard import
+    method: POST
+    user: admin                                   # Default Grafana username
+    password: admin                               # Default Grafana password
+    force_basic_auth: yes                         # Required for basic authentication
+    headers:
+      Content-Type: "application/json"            # Required content type
+    body: >-
+      {{
+        lookup('file', 'dashboard-prometheus.json')    # Load local JSON file
+        | from_json                                    # Convert to data structure
+        | combine({                                    # Wrap in Grafana API structure
+            'dashboard': {'id': null, 'uid': 'prometheus-dashboard'},
+            'overwrite': true,
+            'folderId': 0,
+            'message': 'Deployed via Ansible'
+        })
+        | to_json                                      # Convert back to JSON for POST
+      }}
+    body_format: json
+  register: prometheus_dashboard_result               # Optional: store result for debugging
+
+# Import Node Exporter dashboard (ID 1860) from local JSON file
+- name: Import Node Exporter dashboard
+  uri:
+    url: http://localhost:3000/api/dashboards/db
+    method: POST
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    headers:
+      Content-Type: "application/json"
+    body: >-
+      {{
+        lookup('file', 'dashboard-node-exporter.json')
+        | from_json
+        | combine({
+            'dashboard': {'id': null, 'uid': 'nodeexporter-dashboard'},
+            'overwrite': true,
+            'folderId': 0,
+            'message': 'Deployed via Ansible'
+        })
+        | to_json
+      }}
+    body_format: json
+  register: node_exporter_dashboard_result
