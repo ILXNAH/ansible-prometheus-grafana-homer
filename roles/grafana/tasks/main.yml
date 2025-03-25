@@ -4,37 +4,37 @@
 
 # Install required packages for adding external APT repositories
 - name: Install packages for Grafana
-  apt:
+  ansible.builtin.apt:
     name:
       - apt-transport-https         # Enables APT over HTTPS
       - software-properties-common  # Tools for managing APT repositories
       - wget                        # Required for downloading files
     state: present
-    update_cache: yes
+    update_cache: true
   become: true   # Run with elevated privileges (sudo)
 
 # Add Grafana's official GPG key for APT package verification
 - name: Add Grafana APT key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://packages.grafana.com/gpg.key
     state: present
 
 # Add Grafana's APT repository to the system sources list
 - name: Add Grafana APT repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "deb https://packages.grafana.com/oss/deb stable main"
     state: present
 
 # Install Grafana from the newly added repository
 - name: Install Grafana
-  apt:
+  ansible.builtin.apt:
     name: grafana
     state: present
     update_cache: yes
 
 # Enable and start the Grafana systemd service
 - name: Enable and start Grafana service
-  systemd:
+  ansible.builtin.systemd:
     name: grafana-server
     enabled: true     # Start at boot
     state: started    # Start now
@@ -42,7 +42,7 @@
 
 # Create a separate datasource file for each Prometheus instance
 - name: Provision multiple Prometheus datasources
-  template:
+  ansible.builtin.template:
     src: prometheus-datasource.yml.j2
     dest: "/etc/grafana/provisioning/datasources/{{ item.name }}.yml"
     owner: root
@@ -52,12 +52,12 @@
 
 # Import Prometheus dashboard (ID 19105) from local JSON file
 - name: Import Prometheus dashboard
-  uri:
+  ansible.builtin.uri:
     url: http://localhost:3000/api/dashboards/db  # Grafana API endpoint for dashboard import
     method: POST
     user: admin                                   # Default Grafana username
     password: admin                               # Default Grafana password
-    force_basic_auth: yes                         # Required for basic authentication
+    force_basic_auth: true                        # Required for basic authentication
     headers:
       Content-Type: "application/json"            # Required content type
     body: >-
@@ -77,12 +77,12 @@
 
 # Import Node Exporter dashboard (ID 1860) from local JSON file
 - name: Import Node Exporter dashboard
-  uri:
+  ansible.builtin.uri:
     url: http://localhost:3000/api/dashboards/db
     method: POST
     user: admin
     password: admin
-    force_basic_auth: yes
+    force_basic_auth: true
     headers:
       Content-Type: "application/json"
     body: >-
