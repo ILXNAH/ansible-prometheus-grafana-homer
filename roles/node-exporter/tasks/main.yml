@@ -4,28 +4,29 @@
 
 # Download the latest node-exporter binary from official Prometheus GitHub release
 - name: Download node-exporter binary
-  get_url:
+  ansible.builtin.get_url:
     url: https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
     dest: /tmp/node_exporter.tar.gz
+    mode: '0644'
 
 # Extract the downloaded archive and place the binary in /usr/local/bin
 - name: Extract node-exporter binary
-  unarchive:
+  ansible.builtin.unarchive:
     src: /tmp/node_exporter.tar.gz
     dest: /usr/local/bin
-    remote_src: yes
+    remote_src: true
     extra_opts: [--strip-components=1]
 
 # Create a dedicated system user to run node-exporter securely
 - name: Create node-exporter user
-  user:
+  ansible.builtin.user:
     name: node_exporter
-    system: yes
+    system: true
     shell: /bin/false
 
 # Set proper ownership and permissions for the node-exporter binary
 - name: Set ownership on node_exporter binary
-  file:
+  ansible.builtin.file:
     path: /usr/local/bin/node_exporter
     owner: node_exporter
     group: node_exporter
@@ -33,7 +34,7 @@
 
 # Create a systemd service unit file for managing node-exporter service
 - name: Create systemd service file for node-exporter
-  copy:
+  ansible.builtin.copy:
     dest: /etc/systemd/system/node_exporter.service
     content: |
       [Unit]
@@ -46,10 +47,11 @@
 
       [Install]
       WantedBy=default.target
+    mode: '0644'
 
 # Ensure node-exporter service is enabled (start on boot) and running now
 - name: Enable and start node-exporter service
-  systemd:
+  ansible.builtin.systemd:
     name: node_exporter
     enabled: true
     state: started
