@@ -85,13 +85,20 @@
 # Import Node Exporter dashboard (ID 1860) from local JSON file
 - name: Import Node Exporter dashboard
   ansible.builtin.uri:
+    # Grafana API endpoint for dashboard import
     url: http://localhost:3000/api/dashboards/db
     method: POST
-    user: admin
-    password: admin
-    force_basic_auth: true
+    user: admin                                   # Default Grafana username
+    password: admin                               # Default Grafana password
+    force_basic_auth: true                        # Required for basic authentication
     headers:
-      Content-Type: "application/json"
+      Content-Type: "application/json"            # Required content type
+    # Load dashboard JSON and post it to Grafana API
+    # Steps below:
+    # - lookup: load file
+    # - from_json: parse it
+    # - combine: wrap in Grafana structure
+    # - to_json: convert back to JSON
     body: >-
       {{
         lookup('file', 'dashboard-node-exporter.json')
@@ -105,4 +112,5 @@
         | to_json
       }}
     body_format: json
-  register: node_exporter_dashboard_result
+  register: node_exporter_dashboard_result         # Optional: store result for debugging
+
