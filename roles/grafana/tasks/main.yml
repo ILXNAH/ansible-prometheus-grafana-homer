@@ -61,6 +61,12 @@
     force_basic_auth: true                        # Required for basic authentication
     headers:
       Content-Type: "application/json"            # Required content type
+    # Load dashboard JSON and post it to Grafana API
+    # Steps below:
+    # - lookup: load file
+    # - from_json: parse it
+    # - combine: wrap in Grafana structure
+    # - to_json: convert back to JSON
     body: >-
       {{
         lookup('file', 'dashboard-prometheus.json')
