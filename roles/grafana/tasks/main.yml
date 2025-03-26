@@ -11,7 +11,6 @@
       - wget                        # Required for downloading files
     state: present
     update_cache: true
-  become: true   # Run with elevated privileges (sudo)
 
 # Add Grafana's official GPG key for APT package verification
 - name: Add Grafana APT key
