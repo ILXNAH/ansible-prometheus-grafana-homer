@@ -2,7 +2,9 @@
 
 [all]
 # Replace the IP address below with your actual dev server's public IP
-# Use the correct username for SSH (e.g., ubuntu, ec2-user, etc.)
+# Use the appropriate SSH user depending on your EC2 image:
+# - ubuntu      → for Ubuntu AMIs (e.g., Ubuntu 22.04)
+# - ec2-user    → for Amazon Linux
 # For development, the entire monitoring stack runs on a single host
     # If needed, you can extend this for more dev nodes later
 dev ansible_host=IP_ADDRESS_HERE ansible_user=ubuntu
