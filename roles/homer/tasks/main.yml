@@ -1,0 +1,64 @@
+---
+# tasks file for homer role
+# This role installs and configures the Homer dashboard on target hosts.
+
+# Create installation directory for Homer
+- name: Create Homer installation directory
+  ansible.builtin.file:
+    path: /opt/homer
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+# Download the latest Homer release archive from GitHub
+- name: Download Homer release archive
+  ansible.builtin.get_url:
+    url: https://github.com/bastienwirtz/homer/releases/latest/download/homer.tar.gz
+    dest: /tmp/homer.tar.gz
+    mode: '0644'
+
+# Extract Homer archive to the target directory
+- name: Extract Homer archive to /opt/homer
+  ansible.builtin.unarchive:
+    src: /tmp/homer.tar.gz
+    dest: /opt/homer
+    remote_src: true
+    extra_opts: [--strip-components=1]
+
+# Deploy Homer configuration file from Jinja2 template
+- name: Deploy Homer configuration
+  ansible.builtin.template:
+    src: config.yml.j2
+    dest: /opt/homer/assets/config.yml
+    owner: root
+    group: root
+    mode: '0644'
+
+# Create systemd service for Homer to enable autostart on boot
+- name: Create systemd service for Homer
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/homer.service
+    content: |
+      [Unit]
+      Description=Homer Dashboard
+      After=network.target
+
+      [Service]
+      ExecStart=/usr/bin/python3 -m http.server 8080 --directory /opt/homer
+      WorkingDirectory=/opt/homer
+      Restart=always
+
+      [Install]
+      WantedBy=multi-user.target
+    owner: root
+    group: root
+    mode: '0644'
+
+# Enable and start the Homer systemd service
+- name: Enable and start Homer service
+  ansible.builtin.systemd:
+    name: homer
+    enabled: true
+    state: started
+    daemon_reload: true
