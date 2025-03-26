@@ -31,3 +31,7 @@ drafts/
 
 # Ignore local Ansible metadata and SSH known_hosts (e.g. from dynamic inventory)
 .ansible/
+
+# Ansible Vault password file
+# Uncomment in real-world usage to ⚠️ avoid committing sensitive data ⚠️
+# .vault_pass.txt
