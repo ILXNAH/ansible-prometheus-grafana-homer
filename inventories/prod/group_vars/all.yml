@@ -13,8 +13,4 @@ prometheus_targets:
 
 # Homer dashboard variables (for Homer template)
 homer_dashboard_title: "Prod Monitoring Dashboard"
-
-prometheus_1_ip: "IP_PROM1"
-prometheus_2_ip: "IP_PROM2"
-prometheus_3_ip: "IP_PROM3"
 grafana_ip: "IP_GRAFANA"

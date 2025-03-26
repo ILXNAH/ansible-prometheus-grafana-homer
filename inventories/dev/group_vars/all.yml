@@ -9,8 +9,4 @@ prometheus_targets:
 
 # Homer dashboard variables (for Homer template)
 homer_dashboard_title: "Dev Monitoring Dashboard"
-
-prometheus_1_ip: "localhost"
-prometheus_2_ip: "localhost"
-prometheus_3_ip: "localhost"
 grafana_ip: "localhost"
