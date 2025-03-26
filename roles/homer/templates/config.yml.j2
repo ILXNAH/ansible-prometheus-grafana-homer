@@ -1,0 +1,28 @@
+# Homer dashboard configuration (Jinja2 template)
+
+# Set dashboard title dynamically based on environment
+title: "{{ homer_dashboard_title }}"  # e.g., Dev Monitoring Dashboard
+
+# Enable dark mode theme
+theme: dark
+
+links:
+  - name: Monitoring
+    icon: fas fa-chart-line
+    items:
+      - name: Prometheus 1
+        logo: https://upload.wikimedia.org/wikipedia/commons/3/38/Prometheus_software_logo.svg
+        url: http://{{ prometheus_1_ip }}:9090
+
+      - name: Prometheus 2
+        logo: https://upload.wikimedia.org/wikipedia/commons/3/38/Prometheus_software_logo.svg
+        url: http://{{ prometheus_2_ip }}:9090
+
+      - name: Prometheus 3
+        logo: https://upload.wikimedia.org/wikipedia/commons/3/38/Prometheus_software_logo.svg
+        url: http://{{ prometheus_3_ip }}:9090
+
+      - name: Grafana
+        logo: https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg
+        url: http://{{ grafana_ip }}:3000
+
