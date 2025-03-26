@@ -56,7 +56,7 @@
     url: http://localhost:3000/api/dashboards/db
     method: POST
     user: admin                                   # Default Grafana username
-    password: admin                               # Default Grafana password
+    password: "{{ grafana_admin_password }}"      # Secure password loaded from Vault
     force_basic_auth: true                        # Required for basic authentication
     headers:
       Content-Type: "application/json"            # Required content type
@@ -88,7 +88,7 @@
     url: http://localhost:3000/api/dashboards/db
     method: POST
     user: admin                                   # Default Grafana username
-    password: admin                               # Default Grafana password
+    password: "{{ grafana_admin_password }}"      # Secure password loaded from Vault
     force_basic_auth: true                        # Required for basic authentication
     headers:
       Content-Type: "application/json"            # Required content type
