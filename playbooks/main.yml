@@ -2,30 +2,45 @@
 
 # This play runs on all hosts (in both dev and prod inventories)
 # It installs and configures node-exporter for basic system metrics
+# 🏷️ Tagged as: node_exporter (can be run with --tags node_exporter)
 - name: Install node exporter on all hosts
   hosts: all
+  tags: node_exporter
   roles:
     - node-exporter  # Defined in roles/node-exporter/tasks/main.yml
 
 # This play runs only on hosts in the [prometheus] group
 # It installs Prometheus and configures it to scrape its own metrics and node-exporter on localhost
+# 🏷️ Tagged as: prometheus (can be run with --tags prometheus)
 - name: Install and configure Prometheus
   hosts: prometheus
+  tags: prometheus
   roles:
     - prometheus  # Defined in roles/prometheus/tasks/main.yml
 
 # This play installs Grafana on hosts in the [grafana] group
 # It configures datasources for all Prometheus instances and imports dashboards
+# 🏷️ Tagged as: grafana (can be run with --tags grafana)
 - name: Install and configure Grafana
   hosts: grafana
+  tags: grafana
   roles:
     - grafana  # Defined in roles/grafana/tasks/main.yml
 
-# This play installs Homer and nginx reverse proxy on hosts in the [homer] group
-# Homer will serve as a homepage with links to Prometheus instances and Grafana
-# nginx will proxy HTTP requests from port 80 to Homer's port 8080
-- name: Install Homer dashboard and nginx reverse proxy
+# This play installs Homer on hosts in the [homer] group
+# It deploys the Homer dashboard (port 8080) as a homepage with links to Prometheus and Grafana
+# 🏷️ Tagged as: homer (can be run with --tags homer)
+- name: Install Homer dashboard
   hosts: homer
+  tags: homer
   roles:
-    - homer      # Defined in roles/homer/tasks/main.yml
-    - nginx      # Defined in roles/nginx/tasks/main.yml
+    - homer  # Defined in roles/homer/tasks/main.yml
+
+# This play installs nginx reverse proxy on hosts in the [homer] group
+# It sets up nginx to proxy HTTP traffic from port 80 to Homer’s port 8080
+# 🏷️ Tagged as: nginx (can be run with --tags nginx)
+- name: Install nginx reverse proxy
+  hosts: homer
+  tags: nginx
+  roles:
+    - nginx  # Defined in roles/nginx/tasks/main.yml
