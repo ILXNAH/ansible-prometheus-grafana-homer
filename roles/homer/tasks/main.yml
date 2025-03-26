@@ -62,3 +62,10 @@
     enabled: true
     state: started
     daemon_reload: true
+
+# Replace default Homer logo with custom donut logo from official repo
+- name: Replace Homer logo (donut icon)
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/bastienwirtz/homer/main/public/logo.png
+    dest: /opt/homer/assets/icons/logo.png
+    mode: '0644'
