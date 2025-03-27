@@ -2,13 +2,20 @@
 * text=auto
 
 # Explicit line ending settings for specific file types
-*.sh text eol=lf      # Shell scripts should use LF (Linux/macOS)
-*.ps1 text eol=crlf   # PowerShell scripts should use CRLF (Windows)
-*.bat text eol=crlf   # Windows batch scripts should use CRLF
-*.md text eol=lf      # Markdown files should use LF
-*.yml text eol=lf     # YAML files should use LF
-*.json text eol=lf    # JSON files should use LF
-*.toml text eol=lf    # TOML files should use LF
+## Shell scripts should use LF (Linux/macOS)
+*.sh text eol=lf
+## PowerShell scripts should use CRLF (Windows)
+*.ps1 text eol=crlf
+## Windows batch scripts should use CRLF
+*.bat text eol=crlf
+## Markdown files should use LF
+*.md text eol=lf
+## YAML files should use LF
+*.yml text eol=lf
+## JSON files should use LF
+*.json text eol=lf
+## TOML files should use LF
+*.toml text eol=lf
 
 # Treat binary files correctly (they should not be converted)
 *.png binary
