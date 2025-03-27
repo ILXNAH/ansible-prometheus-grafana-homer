@@ -35,3 +35,6 @@ drafts/
 # Ansible Vault password file
 # Uncomment in real-world usage to ⚠️ avoid committing sensitive data ⚠️
 # .vault_pass.txt
+
+# SSH keys for local testing
+docker/test_key
