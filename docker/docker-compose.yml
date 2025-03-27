@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  devhost:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ansible-dev
+    ports:
+      - "2222:22"  # SSH exposed on localhost:2222
+    restart: unless-stopped
