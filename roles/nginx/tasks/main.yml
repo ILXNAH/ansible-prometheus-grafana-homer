@@ -1,0 +1,40 @@
+---
+# tasks file for nginx role
+# This role installs nginx and configures it as a reverse proxy for the Homer dashboard
+
+# Install nginx from APT
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: true
+
+# Deploy nginx configuration from template
+- name: Deploy nginx configuration
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/homer
+    owner: root
+    group: root
+    mode: '0644'
+
+# Enable Homer nginx site (symlink in sites-enabled)
+- name: Enable nginx site for Homer
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/homer
+    dest: /etc/nginx/sites-enabled/homer
+    state: link
+    force: true
+
+# Remove default site if exists (optional but cleaner)
+- name: Remove default nginx site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+# Reload nginx to apply the new configuration
+- name: Reload nginx
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+    enabled: true
