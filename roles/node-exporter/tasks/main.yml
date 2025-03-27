@@ -35,7 +35,8 @@
 # Start node-exporter manually since systemd is not available in containers
 - name: Start node-exporter manually in background (without systemd)
   become: true
-  shell: |
+  ansible.builtin.shell: |
     nohup /usr/local/bin/node_exporter > /var/log/node_exporter.log 2>&1 &
   args:
     executable: /bin/bash
+  creates: /var/log/node_exporter.log
