@@ -1,12 +1,12 @@
 FROM ubuntu:22.04
 
+# Set environment variable to avoid interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install required packages
 RUN apt-get update && apt-get install -y \
     openssh-server \
     sudo \
-    systemd \
     curl \
     wget \
     python3 \
@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
 RUN useradd -m -s /bin/bash ansible && \
     echo 'ansible ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# Prepare SSH server
+# Prepare SSH server runtime directory
 RUN mkdir /var/run/sshd
 
 # Expose SSH port
@@ -33,5 +33,5 @@ RUN chown -R ansible:ansible /home/ansible/.ssh && \
     chmod 700 /home/ansible/.ssh && \
     chmod 600 /home/ansible/.ssh/authorized_keys
 
-# Start SSH server
+# Start SSH server in foreground mode (required for Docker)
 CMD ["/usr/sbin/sshd", "-D"]
