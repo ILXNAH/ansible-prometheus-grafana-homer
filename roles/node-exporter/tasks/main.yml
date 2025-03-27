@@ -32,27 +32,10 @@
     group: node_exporter
     mode: '0755'
 
-# Create a systemd service unit file for managing node-exporter service
-- name: Create systemd service file for node-exporter
-  ansible.builtin.copy:
-    dest: /etc/systemd/system/node_exporter.service
-    content: |
-      [Unit]
-      Description=Prometheus Node Exporter
-      After=network.target
-
-      [Service]
-      User=node_exporter
-      ExecStart=/usr/local/bin/node_exporter
-
-      [Install]
-      WantedBy=default.target
-    mode: '0644'
-
-# Ensure node-exporter service is enabled (start on boot) and running now
-- name: Enable and start node-exporter service
-  ansible.builtin.systemd:
-    name: node_exporter
-    enabled: true
-    state: started
-    daemon_reload: true
+# Start node-exporter manually since systemd is not available in containers
+- name: Start node-exporter manually in background (without systemd)
+  become: true
+  shell: |
+    nohup /usr/local/bin/node_exporter > /var/log/node_exporter.log 2>&1 &
+  args:
+    executable: /bin/bash
